@@ -1,0 +1,44 @@
+{
+  "queries": [
+    {
+      "id": "q001",
+      "query": "What is the company's remote work policy?",
+      "ground_truth_answer": "Employees can work remotely up to 3 days per week with manager approval. Remote work requests must be submitted at least 24 hours in advance.",
+      "relevant_chunk_ids": [],
+      "category": "hr_policy",
+      "difficulty": "easy"
+    },
+    {
+      "id": "q002",
+      "query": "How do I request time off?",
+      "ground_truth_answer": "Time off requests should be submitted through the HR portal at least 2 weeks in advance. Emergency leave can be requested with shorter notice by contacting your manager directly.",
+      "relevant_chunk_ids": [],
+      "category": "hr_policy",
+      "difficulty": "easy"
+    },
+    {
+      "id": "q003",
+      "query": "What are the coding standards for Python projects?",
+      "ground_truth_answer": "All Python projects must follow PEP 8 guidelines, use type hints, and maintain at least 80% test coverage. Code reviews are mandatory before merging.",
+      "relevant_chunk_ids": [],
+      "category": "engineering",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q004",
+      "query": "What is the process for submitting expense reports?",
+      "ground_truth_answer": "Expense reports must be submitted within 30 days of the expense. Receipts are required for any expense over $25. Submit through the finance portal and obtain manager approval.",
+      "relevant_chunk_ids": [],
+      "category": "finance",
+      "difficulty": "easy"
+    },
+    {
+      "id": "q005",
+      "query": "What are the security protocols for handling customer data?",
+      "ground_truth_answer": "Customer data must be encrypted at rest and in transit. Access requires role-based authorization. All data access is logged and audited quarterly. PII must not be stored in logs or development environments.",
+      "relevant_chunk_ids": [],
+      "category": "security",
+      "difficulty": "hard"
+    }
+  ]
+}
