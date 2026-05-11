@@ -6,12 +6,13 @@ import json
 import uuid
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
+from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, Request, UploadFile, status
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import allow_admin, allow_admin_hr, get_current_user
 from app.config import settings
+from app.core.tasks import run_ingestion_pipeline
 from app.db.session import get_db
 from app.models.document import Document
 from app.models.user import User
@@ -27,6 +28,8 @@ MAX_FILE_SIZE = 50 * 1024 * 1024  # 50 MB
 
 @router.post("/upload", response_model=DocumentResponse, status_code=status.HTTP_201_CREATED)
 async def upload_document(
+    request: Request,
+    background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     department: str = Form(None),
     doc_type: str = Form(None),
@@ -88,12 +91,18 @@ async def upload_document(
         user_id=current_user.id,
     )
 
-    # TODO: Trigger async ingestion pipeline here
-    # For now, mark as ready (will be replaced with background task)
-    doc.status = "ready"
-    await db.flush()
+    # Trigger async ingestion pipeline in the background
+    embedding_service = getattr(request.app.state, "embedding_service", None)
+    vector_store = getattr(request.app.state, "vector_store", None)
+    background_tasks.add_task(
+        run_ingestion_pipeline,
+        document_id=doc.id,
+        embedding_service=embedding_service,
+        vector_store=vector_store,
+    )
 
     return doc
+
 
 
 @router.get("/", response_model=list[DocumentResponse])
